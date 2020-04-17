@@ -5,44 +5,55 @@ struct tree {
     struct tree *right;
     int data;
 }*t1;
-struct tree* form(struct tree*);
+void form_bst(struct tree*);
 void inorder(struct tree*);
 int height(struct tree*);
 int max(int,int);
 int main()
 {
     printf("Let create the tree first......\nEnter data of root node\n");
-    t1=form(t1);
+    t1 = (struct tree *)malloc(sizeof(struct tree));
+    scanf("%d",&(t1->data));
+    t1->left = NULL;
+    t1->right = NULL;
+    form_bst(t1);
+
     printf("INORDER-->\n");
     inorder(t1);
     printf("Height of Tree is %d\n",height(t1));
     return 0;
 }
 
-struct tree* form(struct tree *t)
+void form_bst(struct tree *root)
 {
-    int l,r;
-    t = (struct tree *)malloc(sizeof(struct tree));
-    scanf("%d",&(t->data));
-    printf("Enter 1 if node rooted at %d has left child else 0\n",t->data);
-    scanf("%d",&l);
-    if(l)
+    int n;
+    printf("Enter number of elements in BST\n");
+    scanf("%d",&n);
+    printf("Enter Elements\n");
+    for(int i=0;i<n;i++)
     {
-        printf("Enter data of left child rooted at %d\n",t->data);
-        t->left=form(t->left);
-    }
-    else
+        int d;
+        scanf("%d",&d);
+        struct tree *t = root;
+        struct tree *pre = root;
+        while(t)
+        {
+            pre = t;
+            if(d>t->data)
+                t = t->right;
+            else
+                t = t->left;
+        }
+        t = (struct tree *)malloc(sizeof(struct tree));
+        if(d>pre->data)
+            pre->right = t;
+        else
+            pre->left = t;
+        t->data = d;
         t->left = NULL;
-    printf("Enter 1 if node rooted at %d has right child else 0\n",t->data);
-    scanf("%d",&r);
-    if(r)
-    {
-        printf("Enter data of right child rooted at %d\n",t->data);
-        t->right=form(t->right);
-    }
-    else
         t->right = NULL;
-    return t;
+    }
+
 }
 
 void inorder(struct tree *t)
